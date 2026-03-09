@@ -11,12 +11,57 @@ services:
       timeout: 3s
       retries: 10
 
-  redis-replica:
+  redis-replica-1:
     image: redis:7-alpine
-    container_name: redis-replica
+    container_name: redis-replica-1
     command: ["redis-server", "--replicaof", "redis-master", "6379", "--appendonly", "yes"]
     ports:
-      - "6380:6379"
+      - "6381:6379"
+    depends_on:
+      redis-master:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis-replica-2:
+    image: redis:7-alpine
+    container_name: redis-replica-2
+    command: ["redis-server", "--replicaof", "redis-master", "6379", "--appendonly", "yes"]
+    ports:
+      - "6382:6379"
+    depends_on:
+      redis-master:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis-replica-3:
+    image: redis:7-alpine
+    container_name: redis-replica-3
+    command: ["redis-server", "--replicaof", "redis-master", "6379", "--appendonly", "yes"]
+    ports:
+      - "6383:6379"
+    depends_on:
+      redis-master:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis-replica-4:
+    image: redis:7-alpine
+    container_name: redis-replica-4
+    command: ["redis-server", "--replicaof", "redis-master", "6379", "--appendonly", "yes"]
+    ports:
+      - "6384:6379"
     depends_on:
       redis-master:
         condition: service_healthy
@@ -34,5 +79,11 @@ services:
     depends_on:
       redis-master:
         condition: service_healthy
-      redis-replica:
+      redis-replica-1:
+        condition: service_healthy
+      redis-replica-2:
+        condition: service_healthy
+      redis-replica-3:
+        condition: service_healthy
+      redis-replica-4:
         condition: service_healthy
